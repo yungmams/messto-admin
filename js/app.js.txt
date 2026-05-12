@@ -1,0 +1,539 @@
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+
+const DATA = {
+  queue: [
+    { id: 1, name: "Balogun Mama Put", category: "Food", city: "Lagos", address: "25 Balogun St, Lagos Island", phone: "+234 801 122 3344", submittedBy: "user_4421", date: "Apr 28, 2025", status: "pending", photos: 2, whatsapp: "+234 801 122 3344", hours: "Mon–Sat 7am–8pm" },
+    { id: 2, name: "Al-Noor Pharmacy", category: "Health", city: "Kano", address: "12 BUK Road, Kano", phone: "+234 902 334 4556", submittedBy: "user_2201", date: "Apr 28, 2025", status: "pending", photos: 1, whatsapp: null, hours: "Mon–Sun 8am–10pm" },
+    { id: 3, name: "Wuse Market ATM", category: "Finance", city: "Abuja", address: "Zone 5, Wuse Market, Abuja", phone: "+234 809 988 7766", submittedBy: "user_9910", date: "Apr 27, 2025", status: "flagged", photos: 0, whatsapp: null, hours: null },
+    { id: 4, name: "Mama Ngozi Bukka", category: "Food", city: "Enugu", address: "40 Ogui Road, Enugu", phone: "+234 805 544 3322", submittedBy: "user_3310", date: "Apr 27, 2025", status: "pending", photos: 3, whatsapp: "+234 805 544 3322", hours: "Mon–Sat 6am–7pm" },
+    { id: 5, name: "Sunshine Pharmacy", category: "Health", city: "Lagos", address: "12 Allen Avenue, Ikeja, Lagos", phone: "+234 807 766 5544", submittedBy: "user_1124", date: "Apr 27, 2025", status: "pending", photos: 1, whatsapp: null, hours: "Mon–Fri 8am–9pm, Sat 9am–6pm" },
+    { id: 6, name: "Park & Ride Motors", category: "Mechanics", city: "Port Harcourt", address: "Trans-Amadi Estate, Port Harcourt", phone: "+234 803 322 1100", submittedBy: "user_8821", date: "Apr 26, 2025", status: "pending", photos: 4, whatsapp: "+234 803 322 1100", hours: "Mon–Sat 7am–7pm" },
+    { id: 7, name: "Ikeja Fuel Station", category: "Fuel", city: "Lagos", address: "14 Awolowo Way, Ikeja", phone: "+234 804 433 2211", submittedBy: "user_5501", date: "Apr 26, 2025", status: "dup", photos: 0, whatsapp: null, hours: "24 hours" },
+    { id: 8, name: "Garki Model Market", category: "Markets", city: "Abuja", address: "Garki Area 1, Abuja", phone: "+234 802 211 3300", submittedBy: "user_6601", date: "Apr 25, 2025", status: "pending", photos: 2, whatsapp: "+234 802 211 3300", hours: "Mon–Sat 7am–6pm" },
+    { id: 9, name: "Trust Hotel & Suites", category: "Hotels", city: "Kaduna", address: "Racecourse Road, Kaduna South", phone: "+234 801 100 2233", submittedBy: "user_7712", date: "Apr 25, 2025", status: "flagged", photos: 3, whatsapp: "+234 801 100 2233", hours: "24 hours" },
+    { id: 10, name: "Musa Spare Parts", category: "Mechanics", city: "Kano", address: "Sabon Gari Market, Kano", phone: "+234 809 900 1122", submittedBy: "user_4400", date: "Apr 24, 2025", status: "dup", photos: 1, whatsapp: null, hours: "Mon–Sat 8am–6pm" },
+    { id: 11, name: "Holy Trinity Church", category: "Worship", city: "Ibadan", address: "Ring Road, Ibadan", phone: "+234 805 111 2222", submittedBy: "user_3302", date: "Apr 24, 2025", status: "pending", photos: 2, whatsapp: null, hours: "Sun 7am–12pm" },
+    { id: 12, name: "PH Central Bus Park", category: "Transport", city: "Port Harcourt", address: "Mile 1 Market, Port Harcourt", phone: "+234 806 333 4444", submittedBy: "user_5503", date: "Apr 23, 2025", status: "pending", photos: 0, whatsapp: null, hours: "5am–9pm daily" },
+  ],
+
+  edits: [
+    { id: 1, place: "Al-Noor Pharmacy", city: "Kano", field: "phone_primary", fieldLabel: "Phone number", old: "+234 802 300 0001", newv: "+234 902 334 4556", by: "user_2201", date: "Apr 28" },
+    { id: 2, place: "Balogun Mama Put", city: "Lagos", field: "opening_hours", fieldLabel: "Opening hours", old: "Mon–Sat 8am–6pm", newv: "Mon–Sun 7am–8pm", by: "user_4421", date: "Apr 28" },
+    { id: 3, place: "Wuse Market ATM", city: "Abuja", field: "address_text", fieldLabel: "Address", old: "Wuse Zone 4, Abuja", newv: "Zone 5, Wuse Market, Abuja", by: "user_9910", date: "Apr 27" },
+    { id: 4, place: "Ikeja Fuel Station", city: "Lagos", field: "category", fieldLabel: "Category", old: "Markets", newv: "Fuel", by: "user_5501", date: "Apr 27" },
+    { id: 5, place: "Trust Hotel & Suites", city: "Kaduna", field: "whatsapp_number", fieldLabel: "WhatsApp", old: "Not listed", newv: "+234 801 100 2233", by: "user_7712", date: "Apr 26" },
+    { id: 6, place: "Musa Spare Parts", city: "Kano", field: "phone_primary", fieldLabel: "Phone number", old: "+234 809 000 0000", newv: "+234 809 900 1122", by: "user_4400", date: "Apr 25" },
+    { id: 7, place: "Garki Model Market", city: "Abuja", field: "opening_hours", fieldLabel: "Opening hours", old: "Mon–Fri 7am–5pm", newv: "Mon–Sat 7am–6pm", by: "user_6601", date: "Apr 25" },
+  ],
+
+  claims: [
+    { id: 1, place: "Sunshine Pharmacy", city: "Lagos", method: "OTP", claimant: "Mrs. Adaeze Okonkwo", phone: "+234 807 766 5544", date: "Apr 28", proof: null },
+    { id: 2, place: "Musa Spare Parts", city: "Kano", method: "Document", claimant: "Alhaji Musa Babangida", phone: "+234 809 900 1122", date: "Apr 27", proof: "CAC_Certificate.pdf" },
+    { id: 3, place: "Trust Hotel & Suites", city: "Kaduna", method: "Document", claimant: "Ibrahim Trust Holdings Ltd", phone: "+234 801 100 2233", date: "Apr 26", proof: "Business_Registration.pdf" },
+    { id: 4, place: "Mama Ngozi Bukka", city: "Enugu", method: "OTP", claimant: "Ngozi Eze", phone: "+234 805 544 3322", date: "Apr 25", proof: null },
+    { id: 5, place: "Park & Ride Motors", city: "Port Harcourt", method: "Document", claimant: "Chukwuemeka Obi", phone: "+234 803 322 1100", date: "Apr 24", proof: "Utility_Bill.pdf" },
+  ],
+
+  reviews: [
+    { id: 1, place: "Wuse Market ATM", city: "Abuja", rating: 1, text: "This place doesn't even exist. Fake listing put here to mislead people. I drove all the way to Zone 5 and found nothing.", reviewer: "user_8823", date: "Apr 28", flags: 4 },
+    { id: 2, place: "Trust Hotel & Suites", city: "Kaduna", rating: 2, text: "Very suspicious — I think someone is spam listing these hotels just to collect phone calls and redirect people. Do not call this number.", reviewer: "user_3301", date: "Apr 27", flags: 2 },
+    { id: 3, place: "Balogun Mama Put", city: "Lagos", rating: 1, text: "Do not go here! The owner was incredibly rude and the food made me sick. Health inspection is needed for this place.", reviewer: "user_5512", date: "Apr 26", flags: 1 },
+  ],
+
+  cities: [
+    { name: "Lagos", state: "Lagos State", places: 18421, pending: 12, growth: 92 },
+    { name: "Abuja", state: "FCT", places: 9203, pending: 5, growth: 78 },
+    { name: "Kano", state: "Kano State", places: 6844, pending: 7, growth: 65 },
+    { name: "Port Harcourt", state: "Rivers State", places: 4102, pending: 0, growth: 52 },
+    { name: "Enugu", state: "Enugu State", places: 2881, pending: 0, growth: 44 },
+    { name: "Ibadan", state: "Oyo State", places: 1490, pending: 0, growth: 38 },
+    { name: "Kaduna", state: "Kaduna State", places: 1204, pending: 0, growth: 30 },
+    { name: "Ilorin", state: "Kwara State", places: 891, pending: 0, growth: 22 },
+  ],
+};
+
+// ─── STATE ─────────────────────────────────────────────────────────────────────
+
+const State = {
+  currentView: 'queue',
+  queueFilter: { search: '', city: '', category: '', tab: 'all' },
+  selected: new Set(),
+  stats: { pending: 24, edits: 11, claims: 7, approved: 18 },
+};
+
+// ─── UTILS ─────────────────────────────────────────────────────────────────────
+
+const CITY_COLORS = {
+  Lagos: '#22c55e', Abuja: '#3b82f6', Kano: '#f59e0b',
+  Enugu: '#f97316', 'Port Harcourt': '#ec4899', Kaduna: '#a78bfa',
+  Ibadan: '#06b6d4', Ilorin: '#84cc16',
+};
+
+function cityColor(c) { return CITY_COLORS[c] || '#5a635a'; }
+
+function statusBadge(s) {
+  const cfg = {
+    pending: { cls: 'badge-pending', icon: clockIcon(), label: 'Pending' },
+    flagged:  { cls: 'badge-flagged',  icon: flagIcon(),  label: 'Flagged' },
+    dup:      { cls: 'badge-dup',      icon: copyIcon(),  label: 'Possible dup' },
+    approved: { cls: 'badge-approved', icon: checkIcon(), label: 'Approved' },
+    rejected: { cls: 'badge-rejected', icon: xIcon(),     label: 'Rejected' },
+  };
+  const c = cfg[s] || cfg.pending;
+  return `<span class="badge ${c.cls}">${c.icon} ${c.label}</span>`;
+}
+
+function methodBadge(m) {
+  return m === 'OTP'
+    ? `<span class="badge badge-otp">${shieldIcon()} OTP verified</span>`
+    : `<span class="badge badge-pending">${fileIcon()} Document</span>`;
+}
+
+function stars(n) {
+  return `<span class="stars">${'★'.repeat(n)}</span><span class="stars-dim">${'★'.repeat(5 - n)}</span>`;
+}
+
+function toast(msg, type = 'green') {
+  const icon = type === 'green' ? checkIcon() : type === 'red' ? xIcon() : warnIcon();
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `${icon} ${msg}`;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(() => el.remove(), 3500);
+}
+
+// ─── ICONS (inline SVG) ────────────────────────────────────────────────────────
+
+const svg = (d, vb = '0 0 24 24') =>
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+
+const checkIcon  = () => svg('<polyline points="20 6 9 17 4 12"/>');
+const xIcon      = () => svg('<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>');
+const eyeIcon    = () => svg('<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>');
+const trashIcon  = () => svg('<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>');
+const clockIcon  = () => svg('<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>');
+const flagIcon   = () => svg('<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>');
+const copyIcon   = () => svg('<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>');
+const shieldIcon = () => svg('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>');
+const fileIcon   = () => svg('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>');
+const refreshIcon= () => svg('<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>');
+const arrowIcon  = () => svg('<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>');
+const warnIcon   = () => svg('<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>');
+const searchIcon = () => svg('<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>');
+const buildIcon  = () => svg('<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>');
+const mapPinIcon = () => svg('<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>');
+const starIcon   = () => svg('<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>');
+const editIcon   = () => svg('<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>');
+const photoIcon  = () => svg('<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>');
+const chevIcon   = () => svg('<polyline points="9 18 15 12 9 6"/>');
+const clipIcon   = () => svg('<path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>');
+const bellIcon   = () => svg('<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>');
+const settIcon   = () => svg('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>');
+
+// ─── RENDER FUNCTIONS ─────────────────────────────────────────────────────────
+
+function getFilteredQueue() {
+  const { search, city, category, tab } = State.queueFilter;
+  return DATA.queue.filter(r => {
+    if (tab === 'dup' && r.status !== 'dup') return false;
+    if (tab === 'flagged' && r.status !== 'flagged') return false;
+    if (search && !`${r.name} ${r.address}`.toLowerCase().includes(search.toLowerCase())) return false;
+    if (city && r.city !== city) return false;
+    if (category && r.category !== category) return false;
+    return true;
+  });
+}
+
+function renderQueue() {
+  const data = getFilteredQueue();
+  const tbody = document.getElementById('queue-tbody');
+  if (!data.length) {
+    tbody.innerHTML = `<tr><td colspan="8">
+      <div class="empty-state">
+        ${checkIcon()}
+        <p>All caught up!</p>
+        <span>No listings match the current filters.</span>
+      </div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = data.map(r => `
+    <tr onclick="openModal('listing', ${r.id})">
+      <td onclick="event.stopPropagation()">
+        <input type="checkbox" class="row-cb" data-id="${r.id}" onchange="toggleRow(this)">
+      </td>
+      <td>
+        <div class="place-name">${r.name}</div>
+        <div class="place-meta">${r.address}</div>
+      </td>
+      <td><span style="color:var(--text-2);font-size:12px">${r.category}</span></td>
+      <td><span class="city-dot" style="background:${cityColor(r.city)}"></span>${r.city}</td>
+      <td><span style="font-size:11px;color:var(--text-3);font-family:var(--font-mono)">${r.submittedBy}</span></td>
+      <td>${statusBadge(r.status)}</td>
+      <td><span style="font-size:11px;color:var(--text-3);font-family:var(--font-mono)">${r.date}</span></td>
+      <td onclick="event.stopPropagation()">
+        <div class="actions">
+          <button class="act-btn view" onclick="openModal('listing',${r.id})" title="Review">${eyeIcon()}</button>
+          <button class="act-btn approve" onclick="quickAction(${r.id},'approve')" title="Approve">${checkIcon()}</button>
+          <button class="act-btn reject" onclick="quickAction(${r.id},'reject')" title="Reject">${xIcon()}</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function renderEdits() {
+  const tbody = document.getElementById('edits-tbody');
+  tbody.innerHTML = DATA.edits.map(e => `
+    <tr onclick="openModal('edit', ${e.id})">
+      <td>
+        <div class="place-name">${e.place}</div>
+        <div class="place-meta">${e.city}</div>
+      </td>
+      <td><span class="badge badge-pending" style="font-size:10px">${e.fieldLabel}</span></td>
+      <td><span style="font-size:12px;color:var(--text-red);text-decoration:line-through">${e.old}</span></td>
+      <td><span style="font-size:12px;color:var(--text-green)">${e.newv}</span></td>
+      <td><span style="font-size:11px;color:var(--text-3);font-family:var(--font-mono)">${e.date} · ${e.by}</span></td>
+      <td onclick="event.stopPropagation()">
+        <div class="actions">
+          <button class="act-btn approve" onclick="approveEdit(${e.id})" title="Approve">${checkIcon()}</button>
+          <button class="act-btn reject" onclick="rejectEdit(${e.id})" title="Reject">${xIcon()}</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function renderClaims() {
+  const tbody = document.getElementById('claims-tbody');
+  tbody.innerHTML = DATA.claims.map(c => `
+    <tr onclick="openModal('claim', ${c.id})">
+      <td>
+        <div class="place-name">${c.place}</div>
+        <div class="place-meta">${c.city}</div>
+      </td>
+      <td>${methodBadge(c.method)}</td>
+      <td><div class="place-name" style="font-size:13px">${c.claimant}</div><div class="place-meta">${c.phone}</div></td>
+      <td>${c.proof ? `<span class="badge badge-otp">${fileIcon()} ${c.proof}</span>` : '<span style="font-size:12px;color:var(--text-3)">—</span>'}</td>
+      <td><span style="font-size:11px;color:var(--text-3);font-family:var(--font-mono)">${c.date}</span></td>
+      <td onclick="event.stopPropagation()">
+        <div class="actions">
+          <button class="act-btn view" onclick="openModal('claim',${c.id})" title="Review">${eyeIcon()}</button>
+          <button class="act-btn approve" onclick="approveClaim(${c.id})" title="Approve">${checkIcon()}</button>
+          <button class="act-btn reject" onclick="rejectClaim(${c.id})" title="Reject">${xIcon()}</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function renderReviews() {
+  const tbody = document.getElementById('reviews-tbody');
+  tbody.innerHTML = DATA.reviews.map(r => `
+    <tr>
+      <td>
+        <div class="place-name">${r.place}</div>
+        <div class="place-meta">${r.city}</div>
+      </td>
+      <td>${stars(r.rating)}</td>
+      <td style="font-size:12px;color:var(--text-2)">${r.text.slice(0, 100)}${r.text.length > 100 ? '…' : ''}</td>
+      <td><span style="font-size:11px;font-family:var(--font-mono);color:var(--text-3)">${r.reviewer}<br>${r.date}</span></td>
+      <td><span class="badge badge-flagged">${flagIcon()} ${r.flags} flag${r.flags !== 1 ? 's' : ''}</span></td>
+      <td>
+        <div class="actions">
+          <button class="act-btn approve" onclick="keepReview(${r.id})" title="Keep review">${checkIcon()}</button>
+          <button class="act-btn reject" onclick="removeReview(${r.id})" title="Remove">${trashIcon()}</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function renderCities() {
+  const tbody = document.getElementById('cities-tbody');
+  const max = Math.max(...DATA.cities.map(c => c.places));
+  tbody.innerHTML = DATA.cities.map(c => `
+    <tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="city-dot" style="background:${cityColor(c.name)};width:10px;height:10px"></span>
+          <div class="place-name">${c.name}</div>
+        </div>
+      </td>
+      <td><span style="font-size:12px;color:var(--text-3)">${c.state}</span></td>
+      <td>
+        <div class="mini-bar-wrap">
+          <div class="mini-bar-track"><div class="mini-bar-fill" style="width:${Math.round(c.places/max*100)}%;background:${cityColor(c.name)}"></div></div>
+          <span class="mini-bar-val">${c.places.toLocaleString()}</span>
+        </div>
+      </td>
+      <td>${c.pending > 0 ? `<span class="badge badge-pending">${c.pending} pending</span>` : '<span style="color:var(--text-3);font-size:12px">—</span>'}</td>
+      <td><span class="badge badge-approved">${checkIcon()} Active</span></td>
+    </tr>`).join('');
+}
+
+// ─── ACTIONS ──────────────────────────────────────────────────────────────────
+
+function quickAction(id, action) {
+  const idx = DATA.queue.findIndex(r => r.id === id);
+  if (idx < 0) return;
+  DATA.queue.splice(idx, 1);
+  if (action === 'approve') {
+    State.stats.approved++;
+    State.stats.pending = Math.max(0, State.stats.pending - 1);
+    toast('Listing approved and published.', 'green');
+  } else {
+    State.stats.pending = Math.max(0, State.stats.pending - 1);
+    toast('Listing rejected.', 'amber');
+  }
+  updateStats();
+  renderQueue();
+  closeModal();
+}
+
+function approveEdit(id) {
+  const idx = DATA.edits.findIndex(e => e.id === id);
+  if (idx >= 0) DATA.edits.splice(idx, 1);
+  State.stats.edits = Math.max(0, State.stats.edits - 1);
+  updateStats();
+  renderEdits();
+  toast('Edit approved and applied.', 'green');
+}
+
+function rejectEdit(id) {
+  const idx = DATA.edits.findIndex(e => e.id === id);
+  if (idx >= 0) DATA.edits.splice(idx, 1);
+  State.stats.edits = Math.max(0, State.stats.edits - 1);
+  updateStats();
+  renderEdits();
+  toast('Edit rejected.', 'amber');
+}
+
+function approveClaim(id) {
+  const idx = DATA.claims.findIndex(c => c.id === id);
+  if (idx >= 0) DATA.claims.splice(idx, 1);
+  State.stats.claims = Math.max(0, State.stats.claims - 1);
+  updateStats();
+  renderClaims();
+  toast('Claim approved — business verified!', 'green');
+  closeModal();
+}
+
+function rejectClaim(id) {
+  const idx = DATA.claims.findIndex(c => c.id === id);
+  if (idx >= 0) DATA.claims.splice(idx, 1);
+  State.stats.claims = Math.max(0, State.stats.claims - 1);
+  updateStats();
+  renderClaims();
+  toast('Claim rejected.', 'amber');
+  closeModal();
+}
+
+function keepReview(id) {
+  const idx = DATA.reviews.findIndex(r => r.id === id);
+  if (idx >= 0) DATA.reviews.splice(idx, 1);
+  renderReviews();
+  toast('Review kept — flags cleared.', 'green');
+}
+
+function removeReview(id) {
+  const idx = DATA.reviews.findIndex(r => r.id === id);
+  if (idx >= 0) DATA.reviews.splice(idx, 1);
+  renderReviews();
+  toast('Review removed.', 'amber');
+}
+
+// ─── BULK ACTIONS ─────────────────────────────────────────────────────────────
+
+function toggleSelectAll(cb) {
+  document.querySelectorAll('.row-cb').forEach(c => {
+    c.checked = cb.checked;
+    cb.checked ? State.selected.add(parseInt(c.dataset.id)) : State.selected.delete(parseInt(c.dataset.id));
+  });
+  updateBulk();
+}
+
+function toggleRow(cb) {
+  const id = parseInt(cb.dataset.id);
+  cb.checked ? State.selected.add(id) : State.selected.delete(id);
+  updateBulk();
+}
+
+function updateBulk() {
+  const n = State.selected.size;
+  const bar = document.getElementById('bulk-bar');
+  bar.classList.toggle('visible', n > 0);
+  document.getElementById('bulk-count').textContent = n;
+  document.getElementById('bulk-approve-btn').style.display = n > 0 ? '' : 'none';
+  document.getElementById('bulk-reject-btn').style.display = n > 0 ? '' : 'none';
+}
+
+function bulkAction(action) {
+  const ids = [...State.selected];
+  ids.forEach(id => {
+    const idx = DATA.queue.findIndex(r => r.id === id);
+    if (idx >= 0) DATA.queue.splice(idx, 1);
+  });
+  if (action === 'approve') {
+    State.stats.approved += ids.length;
+    toast(`${ids.length} listing${ids.length > 1 ? 's' : ''} approved.`, 'green');
+  } else {
+    toast(`${ids.length} listing${ids.length > 1 ? 's' : ''} rejected.`, 'amber');
+  }
+  State.stats.pending = Math.max(0, State.stats.pending - ids.length);
+  State.selected.clear();
+  updateStats();
+  updateBulk();
+  document.getElementById('select-all').checked = false;
+  renderQueue();
+}
+
+// ─── MODAL ────────────────────────────────────────────────────────────────────
+
+function openModal(type, id) {
+  const overlay = document.getElementById('modal-overlay');
+  const body = document.getElementById('modal-body');
+  const title = document.getElementById('modal-title');
+  const sub = document.getElementById('modal-sub');
+  const footer = document.getElementById('modal-footer');
+
+  if (type === 'listing') {
+    const r = DATA.queue.find(i => i.id === id);
+    if (!r) return;
+    title.textContent = r.name;
+    sub.textContent = `Listing review · ${r.city} · ${r.date}`;
+    const photoHtml = Array.from({ length: Math.max(r.photos, 1) }, () =>
+      `<div class="photo-thumb">${photoIcon()}</div>`).join('');
+    body.innerHTML = `
+      <div class="field-grid-2">
+        <div class="field-group"><div class="field-label">Category</div><div class="field-val">${r.category}</div></div>
+        <div class="field-group"><div class="field-label">Status</div><div class="field-val">${statusBadge(r.status)}</div></div>
+        <div class="field-group"><div class="field-label">City</div><div class="field-val"><span class="city-dot" style="background:${cityColor(r.city)}"></span>${r.city}</div></div>
+        <div class="field-group"><div class="field-label">Submitted by</div><div class="field-val field-val-dim">${r.submittedBy}</div></div>
+      </div>
+      <div class="field-group"><div class="field-label">Address</div><div class="field-val">${r.address}</div></div>
+      <div class="field-grid-2">
+        <div class="field-group"><div class="field-label">Phone</div><div class="field-val">${r.phone}</div></div>
+        <div class="field-group"><div class="field-label">WhatsApp</div><div class="field-val">${r.whatsapp || '<span style="color:var(--text-3)">Not listed</span>'}</div></div>
+      </div>
+      <div class="field-group"><div class="field-label">Opening hours</div><div class="field-val">${r.hours || '<span style="color:var(--text-3)">Not provided</span>'}</div></div>
+      <div class="field-group"><div class="field-label">Photos (${r.photos})</div><div class="photo-grid">${photoHtml}</div></div>
+      ${r.status === 'dup' ? `<div class="warn-box">${warnIcon()} Possible duplicate detected within 20m radius using PostGIS proximity check. Verify this is a unique business before approving.</div>` : ''}
+      ${r.status === 'flagged' ? `<div class="warn-box">${warnIcon()} This listing has been flagged by users. Review carefully before approving.</div>` : ''}
+      <div class="field-group" style="margin-top:16px"><div class="field-label">Admin note (optional)</div><textarea id="modal-note" placeholder="Reason for approval or rejection…"></textarea></div>`;
+    footer.innerHTML = `
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-red" onclick="quickAction(${r.id}, 'reject')">${xIcon()} Reject</button>
+      <button class="btn btn-green" onclick="quickAction(${r.id}, 'approve')">${checkIcon()} Approve & publish</button>`;
+  }
+
+  if (type === 'edit') {
+    const e = DATA.edits.find(i => i.id === id);
+    if (!e) return;
+    title.textContent = `Edit: ${e.place}`;
+    sub.textContent = `Field change · Submitted ${e.date} by ${e.by}`;
+    body.innerHTML = `
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:16px">Review the proposed change below. Approving will update the live listing immediately.</p>
+      <div class="diff-item">
+        <span class="diff-field-name">${e.fieldLabel}</span>
+        <span class="diff-old">${e.old}</span>
+        <span class="diff-arrow">${arrowIcon()}</span>
+        <span class="diff-new">${e.newv}</span>
+      </div>
+      <div class="field-group" style="margin-top:16px"><div class="field-label">Admin note (optional)</div><textarea placeholder="Reason for decision…"></textarea></div>`;
+    footer.innerHTML = `
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-red" onclick="rejectEdit(${e.id})">${xIcon()} Reject</button>
+      <button class="btn btn-green" onclick="approveEdit(${e.id})">${checkIcon()} Approve change</button>`;
+  }
+
+  if (type === 'claim') {
+    const c = DATA.claims.find(i => i.id === id);
+    if (!c) return;
+    title.textContent = `Claim: ${c.place}`;
+    sub.textContent = `Business claim · ${c.city} · ${c.date}`;
+    body.innerHTML = `
+      <div class="field-grid-2">
+        <div class="field-group"><div class="field-label">City</div><div class="field-val">${c.city}</div></div>
+        <div class="field-group"><div class="field-label">Method</div><div class="field-val">${methodBadge(c.method)}</div></div>
+      </div>
+      <div class="field-group"><div class="field-label">Claimant name</div><div class="field-val">${c.claimant}</div></div>
+      <div class="field-group"><div class="field-label">Phone number</div><div class="field-val">${c.phone}</div></div>
+      ${c.proof ? `<div class="field-group"><div class="field-label">Supporting document</div><div class="field-val"><span class="badge badge-otp">${fileIcon()} ${c.proof}</span> <span style="font-size:12px;color:var(--text-3)">— review document before approving</span></div></div>` : `<div class="warn-box">${warnIcon()} OTP-based claim. Ownership verified by sending OTP to the listed phone number.</div>`}
+      <div class="field-group" style="margin-top:16px"><div class="field-label">Admin note (optional)</div><textarea placeholder="Notes on this claim…"></textarea></div>`;
+    footer.innerHTML = `
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-red" onclick="rejectClaim(${c.id})">${xIcon()} Reject claim</button>
+      <button class="btn btn-green" onclick="approveClaim(${c.id})">${shieldIcon()} Approve & verify</button>`;
+  }
+
+  overlay.classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+// ─── NAVIGATION ───────────────────────────────────────────────────────────────
+
+function setView(view) {
+  State.currentView = view;
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelector(`.nav-item[data-view="${view}"]`).classList.add('active');
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(`view-${view}`).classList.add('active');
+  const titles = {
+    queue: 'Moderation queue',
+    edits: 'Pending edits',
+    claims: 'Claim requests',
+    reviews: 'Flagged reviews',
+    cities: 'City coverage',
+    settings: 'Settings',
+  };
+  document.getElementById('topbar-title').textContent = titles[view] || view;
+}
+
+// ─── FILTER HANDLERS ──────────────────────────────────────────────────────────
+
+function onSearchInput(val) { State.queueFilter.search = val; renderQueue(); }
+function onCityFilter(val) { State.queueFilter.city = val; renderQueue(); }
+function onCatFilter(val) { State.queueFilter.category = val; renderQueue(); }
+
+function switchTab(el, tab) {
+  document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  State.queueFilter.tab = tab;
+  renderQueue();
+}
+
+// ─── STATS UPDATE ─────────────────────────────────────────────────────────────
+
+function updateStats() {
+  document.getElementById('stat-pending').textContent = State.stats.pending;
+  document.getElementById('stat-edits').textContent = State.stats.edits;
+  document.getElementById('stat-claims').textContent = State.stats.claims;
+  document.getElementById('stat-approved').textContent = State.stats.approved;
+  document.getElementById('nav-badge-queue').textContent = State.stats.pending;
+  document.getElementById('nav-badge-edits').textContent = State.stats.edits;
+  document.getElementById('nav-badge-claims').textContent = State.stats.claims;
+}
+
+function refreshAll() {
+  const btn = document.getElementById('refresh-btn');
+  btn.style.opacity = '0.5';
+  btn.style.pointerEvents = 'none';
+  setTimeout(() => {
+    btn.style.opacity = '';
+    btn.style.pointerEvents = '';
+    toast('Dashboard refreshed.', 'green');
+  }, 800);
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderQueue();
+  renderEdits();
+  renderClaims();
+  renderReviews();
+  renderCities();
+
+  document.getElementById('modal-overlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeModal();
+  });
+});
