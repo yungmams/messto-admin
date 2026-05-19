@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Messto — Admin Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2322c55e'/><text y='22' x='6' font-size='18' font-family='sans-serif' fill='%230d0f0e'>M</text></svg>">
+<style>
+:root{--bg-base:#0d0f0e;--bg-surface:#141714;--bg-card:#1a1d1a;--bg-hover:#1f231f;--bg-active:#252925;--border:rgba(255,255,255,0.07);--border-mid:rgba(255,255,255,0.12);--border-strong:rgba(255,255,255,0.18);--green:#22c55e;--green-dim:rgba(34,197,94,0.12);--green-mid:rgba(34,197,94,0.25);--amber:#f59e0b;--amber-dim:rgba(245,158,11,0.12);--red:#ef4444;--red-dim:rgba(239,68,68,0.12);--blue:#3b82f6;--blue-dim:rgba(59,130,246,0.12);--purple:#a78bfa;--purple-dim:rgba(167,139,250,0.12);--text-1:#f0f2f0;--text-2:#9ba49b;--text-3:#5a635a;--text-green:#4ade80;--text-amber:#fbbf24;--text-red:#f87171;--text-blue:#60a5fa;--radius-sm:6px;--radius-md:10px;--radius-lg:14px;--radius-xl:18px;--font-sans:'Sora',sans-serif;--font-mono:'DM Mono',monospace;--sidebar-w:230px;--topbar-h:56px;--transition:0.15s ease}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg-base);color:var(--text-1);font-family:var(--font-sans);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.shell{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--bg-surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.content{flex:1;overflow-y:auto;padding:24px 28px}
+.sidebar-logo{padding:20px 18px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.logo-icon{width:32px;height:32px;background:var(--green);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;font-weight:700;color:#0d0f0e;font-family:var(--font-sans)}
+.logo-text{font-size:15px;font-weight:600;letter-spacing:-0.3px}
+.logo-sub{font-size:10px;color:var(--text-3);font-family:var(--font-mono);margin-top:1px}
+.nav-section{padding:18px 0 6px}
+.nav-label{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-3);padding:0 18px 8px;font-family:var(--font-mono)}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 18px;font-size:13px;color:var(--text-2);cursor:pointer;transition:background var(--transition),color var(--transition);position:relative;user-select:none}
+.nav-item:hover{background:var(--bg-hover);color:var(--text-1)}
+.nav-item.active{background:var(--bg-active);color:var(--text-1);font-weight:500}
+.nav-item.active::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:2px;background:var(--green);border-radius:0 2px 2px 0}
+.nav-icon{width:16px;height:16px;flex-shrink:0;opacity:0.7}
+.nav-item.active .nav-icon{opacity:1}
+.nav-badge{margin-left:auto;font-size:10px;font-weight:500;font-family:var(--font-mono);padding:2px 7px;border-radius:20px;background:var(--red-dim);color:var(--text-red);border:1px solid rgba(239,68,68,0.2)}
+.nav-badge.amber{background:var(--amber-dim);color:var(--text-amber);border-color:rgba(245,158,11,0.2)}
+.sidebar-footer{margin-top:auto;padding:16px 18px;border-top:1px solid var(--border)}
+.admin-avatar{display:flex;align-items:center;gap:10px;padding:8px;border-radius:var(--radius-md);cursor:pointer;transition:background var(--transition)}
+.admin-avatar:hover{background:var(--bg-hover)}
+.avatar-circle{width:32px;height:32px;border-radius:50%;background:var(--green-dim);border:1px solid var(--green-mid);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--text-green);flex-shrink:0}
+.avatar-name{font-size:13px;font-weight:500}
+.avatar-role{font-size:10px;color:var(--text-3);font-family:var(--font-mono)}
+.topbar{height:var(--topbar-h);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;gap:16px;flex-shrink:0;background:var(--bg-surface)}
+.topbar-title{font-size:15px;font-weight:600;letter-spacing:-0.2px}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.topbar-badge{display:flex;align-items:center;gap:6px;padding:5px 12px;border:1px solid var(--border);border-radius:var(--radius-md);font-size:12px;color:var(--text-2);background:var(--bg-card)}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green)}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;font-size:12px;font-weight:500;font-family:var(--font-sans);border-radius:var(--radius-md);border:1px solid var(--border-mid);background:var(--bg-card);color:var(--text-1);cursor:pointer;transition:background var(--transition),border-color var(--transition),transform 0.1s;white-space:nowrap}
+.btn:hover{background:var(--bg-hover);border-color:var(--border-strong)}
+.btn:active{transform:scale(0.98)}
+.btn-green{background:var(--green-dim);border-color:rgba(34,197,94,0.3);color:var(--text-green)}
+.btn-green:hover{background:var(--green-mid)}
+.btn-red{background:var(--red-dim);border-color:rgba(239,68,68,0.3);color:var(--text-red)}
+.btn-red:hover{background:rgba(239,68,68,0.2)}
+.btn svg{width:14px;height:14px;flex-shrink:0}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;position:relative;overflow:hidden;transition:border-color var(--transition)}
+.stat-card:hover{border-color:var(--border-mid)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px}
+.stat-card.red::before{background:linear-gradient(90deg,transparent,var(--red),transparent)}
+.stat-card.amber::before{background:linear-gradient(90deg,transparent,var(--amber),transparent)}
+.stat-card.green::before{background:linear-gradient(90deg,transparent,var(--green),transparent)}
+.stat-label{font-size:11px;color:var(--text-3);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px}
+.stat-val{font-size:30px;font-weight:600;letter-spacing:-1px;line-height:1;margin-bottom:8px;font-family:var(--font-mono)}
+.stat-card.red .stat-val{color:var(--text-red)}
+.stat-card.amber .stat-val{color:var(--text-amber)}
+.stat-card.green .stat-val{color:var(--text-green)}
+.stat-sub{font-size:11px;color:var(--text-3);display:flex;align-items:center;gap:5px}
+.pill{font-size:10px;padding:1px 6px;border-radius:20px;font-family:var(--font-mono)}
+.pill-up{background:var(--green-dim);color:var(--text-green)}
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.search-wrap{position:relative;flex:1;max-width:300px}
+.search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--text-3);pointer-events:none}
+.search-wrap input{width:100%;padding:7px 12px 7px 32px;font-size:13px;font-family:var(--font-sans);background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);color:var(--text-1);transition:border-color var(--transition);outline:none}
+.search-wrap input:focus{border-color:var(--border-strong)}
+.search-wrap input::placeholder{color:var(--text-3)}
+select{padding:7px 28px 7px 12px;font-size:12px;font-family:var(--font-sans);background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);color:var(--text-2);cursor:pointer;outline:none;transition:border-color var(--transition);appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235a635a' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center}
+select:focus{border-color:var(--border-strong)}
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:18px}
+.tab-btn{padding:9px 18px;font-size:12px;font-weight:500;color:var(--text-3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color var(--transition),border-color var(--transition);display:flex;align-items:center;gap:7px;user-select:none;font-family:var(--font-sans);background:none;border-top:none;border-left:none;border-right:none}
+.tab-btn:hover{color:var(--text-2)}
+.tab-btn.active{color:var(--text-1);border-bottom-color:var(--green)}
+.tab-count{font-size:10px;font-family:var(--font-mono);padding:1px 6px;border-radius:20px;background:var(--bg-active);color:var(--text-2)}
+.tab-btn.active .tab-count{background:var(--green-dim);color:var(--text-green)}
+.table-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
+thead{background:var(--bg-surface);border-bottom:1px solid var(--border)}
+th{padding:10px 16px;text-align:left;font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;font-family:var(--font-mono);white-space:nowrap}
+td{padding:13px 16px;border-bottom:1px solid var(--border);vertical-align:middle;color:var(--text-1)}
+tr:last-child td{border-bottom:none}
+tbody tr{transition:background var(--transition);cursor:pointer}
+tbody tr:hover td{background:var(--bg-hover)}
+.place-name{font-weight:500;font-size:13px}
+.place-meta{font-size:11px;color:var(--text-3);margin-top:2px;font-family:var(--font-mono)}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:3px 8px;border-radius:20px;white-space:nowrap;font-family:var(--font-mono)}
+.badge svg{width:10px;height:10px}
+.badge-pending{background:var(--amber-dim);color:var(--text-amber);border:1px solid rgba(245,158,11,0.2)}
+.badge-flagged{background:var(--red-dim);color:var(--text-red);border:1px solid rgba(239,68,68,0.2)}
+.badge-dup{background:var(--purple-dim);color:var(--purple);border:1px solid rgba(167,139,250,0.2)}
+.badge-approved{background:var(--green-dim);color:var(--text-green);border:1px solid rgba(34,197,94,0.2)}
+.badge-rejected{background:rgba(255,255,255,0.04);color:var(--text-3);border:1px solid var(--border)}
+.badge-otp{background:var(--blue-dim);color:var(--text-blue);border:1px solid rgba(59,130,246,0.2)}
+.actions{display:flex;gap:5px;align-items:center}
+.act-btn{width:28px;height:28px;border-radius:var(--radius-sm);border:1px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-3);transition:all var(--transition);flex-shrink:0}
+.act-btn svg{width:13px;height:13px}
+.act-btn:hover{color:var(--text-1);border-color:var(--border-mid);background:var(--bg-hover)}
+.act-btn.approve:hover{color:var(--text-green);border-color:rgba(34,197,94,0.3);background:var(--green-dim)}
+.act-btn.reject:hover{color:var(--text-red);border-color:rgba(239,68,68,0.3);background:var(--red-dim)}
+.act-btn.view:hover{color:var(--text-blue);border-color:rgba(59,130,246,0.3);background:var(--blue-dim)}
+input[type="checkbox"]{width:15px;height:15px;border-radius:4px;border:1px solid var(--border-mid);background:var(--bg-card);cursor:pointer;accent-color:var(--green)}
+.bulk-bar{display:none;align-items:center;gap:12px;padding:10px 16px;background:var(--green-dim);border:1px solid rgba(34,197,94,0.2);border-radius:var(--radius-md);margin-bottom:12px;font-size:13px;color:var(--text-green);animation:slideIn 0.2s ease}
+.bulk-bar.visible{display:flex}
+@keyframes slideIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.pagination{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-top:1px solid var(--border);font-size:12px;color:var(--text-3);font-family:var(--font-mono)}
+.page-btns{display:flex;gap:4px}
+.page-btn{width:28px;height:28px;border-radius:var(--radius-sm);border:1px solid var(--border);background:transparent;cursor:pointer;font-size:12px;font-family:var(--font-mono);display:flex;align-items:center;justify-content:center;color:var(--text-2);transition:all var(--transition)}
+.page-btn:hover{background:var(--bg-hover);border-color:var(--border-mid);color:var(--text-1)}
+.page-btn.active{background:var(--green-dim);border-color:rgba(34,197,94,0.3);color:var(--text-green)}
+.page-btn svg{width:12px;height:12px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg-card);border:1px solid var(--border-mid);border-radius:var(--radius-xl);width:560px;max-height:85vh;overflow-y:auto;animation:modalIn 0.2s ease;box-shadow:0 24px 80px rgba(0,0,0,0.6)}
+@keyframes modalIn{from{opacity:0;transform:scale(0.96) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg-card);z-index:1}
+.modal-title{font-size:15px;font-weight:600;letter-spacing:-0.2px}
+.modal-sub{font-size:11px;color:var(--text-3);font-family:var(--font-mono);margin-top:2px}
+.modal-body{padding:20px 24px}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;position:sticky;bottom:0;background:var(--bg-card)}
+.field-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.field-group{margin-bottom:16px}
+.field-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-3);font-family:var(--font-mono);margin-bottom:6px}
+.field-val{font-size:13px;color:var(--text-1);line-height:1.5}
+.field-val-dim{font-size:13px;color:var(--text-2)}
+textarea{width:100%;font-family:var(--font-sans);font-size:13px;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);color:var(--text-1);padding:10px 12px;resize:vertical;min-height:70px;outline:none;transition:border-color var(--transition);line-height:1.5}
+textarea:focus{border-color:var(--border-strong)}
+textarea::placeholder{color:var(--text-3)}
+.photo-grid{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.photo-thumb{width:72px;height:72px;border-radius:var(--radius-md);background:var(--bg-surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-3)}
+.photo-thumb svg{width:20px;height:20px}
+.warn-box{background:var(--amber-dim);border:1px solid rgba(245,158,11,0.25);border-radius:var(--radius-md);padding:12px 14px;font-size:12px;color:var(--text-amber);display:flex;gap:8px;align-items:flex-start;margin-top:14px}
+.warn-box svg{width:14px;height:14px;flex-shrink:0;margin-top:1px}
+.diff-item{display:flex;gap:10px;align-items:center;padding:10px 12px;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);margin-bottom:8px}
+.diff-field-name{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.6px;font-family:var(--font-mono);color:var(--text-3);width:90px;flex-shrink:0}
+.diff-old{font-size:12px;color:var(--text-red);text-decoration:line-through;flex:1}
+.diff-arrow{color:var(--text-3);flex-shrink:0}
+.diff-arrow svg{width:12px;height:12px}
+.diff-new{font-size:12px;color:var(--text-green);flex:1}
+.empty-state{text-align:center;padding:60px 24px;color:var(--text-3)}
+.empty-state svg{width:40px;height:40px;margin-bottom:14px;color:var(--text-3)}
+.empty-state p{font-size:14px;margin-bottom:6px}
+.empty-state span{font-size:12px;color:var(--text-3);font-family:var(--font-mono)}
+.city-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:middle;flex-shrink:0}
+.toast-wrap{position:fixed;bottom:20px;right:20px;z-index:999;display:flex;flex-direction:column;gap:8px}
+.toast{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg-card);border:1px solid var(--border-mid);border-radius:var(--radius-md);font-size:13px;box-shadow:0 8px 32px rgba(0,0,0,0.4);animation:toastIn 0.25s ease;min-width:240px}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+.toast.green{border-left:3px solid var(--green)}
+.toast.red{border-left:3px solid var(--red)}
+.toast.amber{border-left:3px solid var(--amber)}
+.toast svg{width:16px;height:16px;flex-shrink:0}
+.toast.green svg{color:var(--text-green)}
+.toast.red svg{color:var(--text-red)}
+.toast.amber svg{color:var(--text-amber)}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px}
+.section-title{font-size:14px;font-weight:600}
+.section-sub{font-size:11px;color:var(--text-3);font-family:var(--font-mono);margin-top:2px}
+.mini-bar-wrap{display:flex;align-items:center;gap:8px}
+.mini-bar-track{flex:1;height:4px;background:var(--bg-active);border-radius:2px;overflow:hidden}
+.mini-bar-fill{height:100%;border-radius:2px;background:var(--green)}
+.mini-bar-val{font-size:11px;font-family:var(--font-mono);color:var(--text-2);width:50px;text-align:right}
+.stars{color:var(--amber);letter-spacing:1px;font-size:13px}
+.stars-dim{color:var(--text-3)}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bg-active);border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:var(--border-strong)}
+.view{display:none;animation:fadeUp 0.2s ease}
+.view.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.toggle-track{width:36px;height:20px;border-radius:20px;position:relative;cursor:pointer;transition:background 0.2s}
+.toggle-on{background:var(--green-dim);border:1px solid rgba(34,197,94,0.3)}
+.toggle-off{background:var(--bg-active);border:1px solid var(--border-mid)}
+.toggle-thumb{width:14px;height:14px;border-radius:50%;position:absolute;top:3px;transition:left 0.2s}
+.toggle-on .toggle-thumb{background:var(--green);left:19px}
+.toggle-off .toggle-thumb{background:var(--text-3);left:3px}
+.settings-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--border)}
+.settings-row:last-child{border-bottom:none}
+.settings-panel{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 24px}
+.settings-panel-title{font-size:13px;font-weight:600;margin-bottom:4px;color:var(--text-1)}
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:1100px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+.login-overlay{position:fixed;inset:0;background:rgba(13,15,14,0.92);display:flex;align-items:center;justify-content:center;z-index:2000;opacity:0;pointer-events:none;transition:opacity .2s}
+.login-overlay.open{opacity:1;pointer-events:auto}
+.login-card{width:min(400px,92vw);background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-xl);padding:28px}
+.login-card h2{font-size:18px;margin-bottom:6px}
+.login-card p{font-size:12px;color:var(--text-3);margin-bottom:20px}
+.login-card label{display:block;font-size:11px;color:var(--text-3);margin-bottom:6px;font-family:var(--font-mono)}
+.login-card input{width:100%;padding:10px 12px;margin-bottom:14px;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);color:var(--text-1);font-family:var(--font-sans);outline:none}
+.login-card input:focus{border-color:var(--border-strong)}
+.login-card button{width:100%;margin-top:8px}
+</style>
+</head>
+<body>
+
+<div class="login-overlay" id="login-overlay">
+  <div class="login-card">
+    <h2>Messto Admin</h2>
+    <p>Sign in with your admin account. Set your API URL if the backend is not on localhost.</p>
+    <form id="login-form">
+      <label for="login-api-url">API URL</label>
+      <input type="url" id="login-api-url" placeholder="http://localhost:5000" />
+      <label for="login-email">Email</label>
+      <input type="email" id="login-email" required placeholder="admin@messto.ng" />
+      <label for="login-password">Password</label>
+      <input type="password" id="login-password" required placeholder="••••••••" />
+      <button type="submit" class="btn btn-green">Sign in</button>
+    </form>
+  </div>
+</div>
+
+<div class="shell">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">M</div>
+      <div>
+        <div class="logo-text">Messto</div>
+        <div class="logo-sub">admin console</div>
+      </div>
+    </div>
+    <nav class="nav-section">
+      <div class="nav-label">Moderation</div>
+      <div class="nav-item active" data-view="queue" onclick="setView('queue')">
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
+        Listings queue
+        <span class="nav-badge" id="nav-badge-queue">24</span>
+      </div>
+      <div class="nav-item" data-view="edits" onclick="setView('edits')">
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Edits review
+        <span class="nav-badge amber" id="nav-badge-edits">11</span>
+      </div>
+      <div class="nav-item" data-view="claims" onclick="setView('claims')">
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Claim requests
+        <span class="nav-badge amber" id="nav-badge-claims">7</span>
+      </div>
+      <div class="nav-item" data-view="reviews" onclick="setView('reviews')">
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Flagged reviews
+        <span class="nav-badge" id="nav-badge-reviews">3</span>
+      </div>
+    </nav>
+    <nav class="nav-section">
+      <div class="nav-label">Platform</div>
+      <div class="nav-item" data-view="api-users" onclick="setView('api-users')">
+        Users (API)
+      </div>
+<div class="nav-item" data-view="api-businesses" onclick="setView('api-businesses')">
+        Businesses (API)
+      </div>      <div class="nav-item" data-view="cities" onclick="setView('cities')">
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        City coverage
+      </div>
+      <div class="nav-item" data-view="settings" onclick="setView('settings')">
+        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l-.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="admin-avatar">
+        <div class="avatar-circle">AD</div>
+        <div>
+          <div class="avatar-name">Admin</div>
+          <div class="avatar-role">super admin</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="topbar-title">Moderation queue</div>
+      <div class="topbar-right">
+        <div class="topbar-badge"><span class="status-dot"></span> API online</div>
+        <button class="btn" id="refresh-btn" onclick="refreshAll()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Refresh
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- STATS -->
+      <div class="stats-grid">
+        <div class="stat-card red"><div class="stat-label">Pending listings</div><div class="stat-val" id="stat-pending">24</div><div class="stat-sub"><span class="pill pill-up">+8</span> added today</div></div>
+        <div class="stat-card amber"><div class="stat-label">Pending edits</div><div class="stat-val" id="stat-edits">11</div><div class="stat-sub">User-submitted corrections</div></div>
+        <div class="stat-card amber"><div class="stat-label">Claim requests</div><div class="stat-val" id="stat-claims">7</div><div class="stat-sub">Awaiting verification</div></div>
+        <div class="stat-card green"><div class="stat-label">Approved today</div><div class="stat-val" id="stat-approved">18</div><div class="stat-sub"><span class="pill pill-up">4m</span> avg review time</div></div>
+      </div>
+
+      <!-- QUEUE VIEW -->
+      <div class="view active" id="view-queue">
+        <div class="tabs">
+          <button class="tab-btn active" onclick="switchTab(this,'all')">All listings <span class="tab-count">24</span></button>
+          <button class="tab-btn" onclick="switchTab(this,'dup')">Possible duplicates <span class="tab-count">4</span></button>
+          <button class="tab-btn" onclick="switchTab(this,'flagged')">Flagged <span class="tab-count">3</span></button>
+        </div>
+        <div class="toolbar">
+          <div class="search-wrap">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" placeholder="Search by name or address…" oninput="onSearchInput(this.value)">
+          </div>
+          <select onchange="onCityFilter(this.value)">
+            <option value="">All cities</option>
+            <option>Lagos</option><option>Abuja</option><option>Kano</option>
+            <option>Port Harcourt</option><option>Enugu</option><option>Ibadan</option><option>Kaduna</option>
+          </select>
+          <select onchange="onCatFilter(this.value)">
+            <option value="">All categories</option>
+            <option>Food</option><option>Health</option><option>Markets</option>
+            <option>Finance</option><option>Mechanics</option><option>Fuel</option>
+            <option>Hotels</option><option>Worship</option><option>Transport</option>
+          </select>
+          <div style="margin-left:auto;display:flex;gap:8px">
+            <button class="btn btn-green" id="bulk-approve-btn" style="display:none" onclick="bulkAction('approve')">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Approve selected
+            </button>
+            <button class="btn btn-red" id="bulk-reject-btn" style="display:none" onclick="bulkAction('reject')">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Reject selected
+            </button>
+          </div>
+        </div>
+        <div class="bulk-bar" id="bulk-bar">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span id="bulk-count">0</span> listings selected
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th style="width:40px"><input type="checkbox" id="select-all" onchange="toggleSelectAll(this)"></th>
+              <th style="width:26%">Place</th><th style="width:11%">Category</th>
+              <th style="width:11%">City</th><th style="width:13%">Submitted by</th>
+              <th style="width:11%">Status</th><th style="width:11%">Date</th>
+              <th style="width:90px">Actions</th>
+            </tr></thead>
+            <tbody id="queue-tbody"></tbody>
+          </table>
+          <div class="pagination">
+            <span>Showing <strong style="color:var(--text-2)" id="showing-count">0</strong> listings</span>
+            <div class="page-btns">
+              <button class="page-btn active">1</button>
+              <button class="page-btn">2</button>
+              <button class="page-btn">3</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EDITS VIEW -->
+      <div class="view" id="view-edits">
+        <div class="toolbar">
+          <div class="search-wrap">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" placeholder="Search edits…">
+          </div>
+          <select><option>All fields</option><option>Phone</option><option>Opening hours</option><option>Address</option><option>Category</option><option>WhatsApp</option></select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th style="width:22%">Place</th><th style="width:14%">Field</th>
+              <th style="width:22%">Old value</th><th style="width:22%">New value</th>
+              <th style="width:14%">Submitted</th><th style="width:80px">Actions</th>
+            </tr></thead>
+            <tbody id="edits-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CLAIMS VIEW -->
+      <div class="view" id="view-claims">
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th style="width:24%">Business</th><th style="width:14%">Method</th>
+              <th style="width:26%">Claimant</th><th style="width:18%">Proof</th>
+              <th style="width:10%">Date</th><th style="width:80px">Actions</th>
+            </tr></thead>
+            <tbody id="claims-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- REVIEWS VIEW -->
+      <div class="view" id="view-reviews">
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th style="width:20%">Place</th><th style="width:10%">Rating</th>
+              <th style="width:35%">Review text</th><th style="width:15%">Reviewer</th>
+              <th style="width:10%">Flags</th><th style="width:80px">Actions</th>
+            </tr></thead>
+            <tbody id="reviews-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+<div class="view" id="view-api-users">
+        <div class="section-head"><div class=""><div><div class="section-title">Users</div><div class="section-sub">Live data from API</div></div></div>
+        <div class="table-wrap"><table><thead><tr><th>User</th><th>Role</th><th>Businesses</th><th>Joined</th><th>Actions</th></tr></thead><tbody id="api-users-body"></tbody></table></div>
+      </div>
+<div class="view" id="view-api-businesses">
+        <div class="section-head"><div><div class="section-title">Businesses</div><div class="section-sub">Live data from API</div></div></div>
+        <div class="table-wrap"><table><thead><tr><th>Place</th><th>Category</th><th>City</th><th>Owner</th><th>Created</th><th>Actions</th></tr></thead><tbody id="api-businesses-body"></tbody></table></div>
+      </div>
+      <!-- CITIES VIEW -->
+      <div class="view" id="view-cities">
+        <div class="section-head">
+          <div><div class="section-title">City coverage</div><div class="section-sub">8 active cities · 44,035 total places</div></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th style="width:20%">City</th><th style="width:22%">State</th>
+              <th style="width:34%">Active places</th><th style="width:14%">Pending</th>
+              <th style="width:10%">Status</th>
+            </tr></thead>
+            <tbody id="cities-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SETTINGS VIEW -->
+      <div class="view" id="view-settings">
+        <div class="section-head"><div><div class="section-title">Admin settings</div><div class="section-sub">Configure moderation rules and notifications</div></div></div>
+        <div class="settings-grid">
+          <div class="settings-panel">
+            <div class="settings-panel-title" style="margin-bottom:16px">Moderation rules</div>
+            <div class="settings-row">
+              <div><div style="font-size:13px;color:var(--text-1)">Auto-reject duplicates</div><div style="font-size:11px;color:var(--text-3);font-family:var(--font-mono)">PostGIS &lt;20m + name similarity &gt;0.8</div></div>
+              <div class="toggle-track toggle-on" onclick="this.className='toggle-track '+(this.className.includes('toggle-on')?'toggle-off':'toggle-on')"><div class="toggle-thumb"></div></div>
+            </div>
+            <div class="settings-row">
+              <div><div style="font-size:13px;color:var(--text-1)">Require photos for approval</div><div style="font-size:11px;color:var(--text-3);font-family:var(--font-mono)">At least 1 photo required</div></div>
+              <div class="toggle-track toggle-off" onclick="this.className='toggle-track '+(this.className.includes('toggle-on')?'toggle-off':'toggle-on')"><div class="toggle-thumb"></div></div>
+            </div>
+            <div class="settings-row">
+              <div><div style="font-size:13px;color:var(--text-1)">Auto-flag on 3+ reports</div><div style="font-size:11px;color:var(--text-3);font-family:var(--font-mono)">Move to flagged queue</div></div>
+              <div class="toggle-track toggle-on" onclick="this.className='toggle-track '+(this.className.includes('toggle-on')?'toggle-off':'toggle-on')"><div class="toggle-thumb"></div></div>
+            </div>
+          </div>
+          <div class="settings-panel">
+            <div class="settings-panel-title" style="margin-bottom:16px">Notification preferences</div>
+            <div class="settings-row">
+              <div><div style="font-size:13px;color:var(--text-1)">Email on new flagged listing</div><div style="font-size:11px;color:var(--text-3);font-family:var(--font-mono)">admin@messto.ng</div></div>
+              <div class="toggle-track toggle-on" onclick="this.className='toggle-track '+(this.className.includes('toggle-on')?'toggle-off':'toggle-on')"><div class="toggle-thumb"></div></div>
+            </div>
+            <div class="settings-row">
+              <div><div style="font-size:13px;color:var(--text-1)">Daily moderation digest</div><div style="font-size:11px;color:var(--text-3);font-family:var(--font-mono)">Sent at 9am WAT</div></div>
+              <div class="toggle-track toggle-on" onclick="this.className='toggle-track '+(this.className.includes('toggle-on')?'toggle-off':'toggle-on')"><div class="toggle-thumb"></div></div>
+            </div>
+            <div class="settings-row">
+              <div><div style="font-size:13px;color:var(--text-1)">Slack webhook alerts</div><div style="font-size:11px;color:var(--text-3);font-family:var(--font-mono)">#moderation-alerts</div></div>
+              <div class="toggle-track toggle-off" onclick="this.className='toggle-track '+(this.className.includes('toggle-on')?'toggle-off':'toggle-on')"><div class="toggle-thumb"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div><div class="modal-title" id="modal-title"></div><div class="modal-sub" id="modal-sub"></div></div>
+      <button class="act-btn" onclick="closeModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer"></div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toasts"></div>
+
+<script src="admin-api.js"></script>
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+var QUEUE = [
+  {id:1,name:"Balogun Mama Put",category:"Food",city:"Lagos",address:"25 Balogun St, Lagos Island",phone:"+234 801 122 3344",by:"user_4421",date:"Apr 28",status:"pending",photos:2,whatsapp:"+234 801 122 3344",hours:"Mon–Sat 7am–8pm"},
+  {id:2,name:"Al-Noor Pharmacy",category:"Health",city:"Kano",address:"12 BUK Road, Kano",phone:"+234 902 334 4556",by:"user_2201",date:"Apr 28",status:"pending",photos:1,whatsapp:null,hours:"Mon–Sun 8am–10pm"},
+  {id:3,name:"Wuse Market ATM",category:"Finance",city:"Abuja",address:"Zone 5, Wuse Market",phone:"+234 809 988 7766",by:"user_9910",date:"Apr 27",status:"flagged",photos:0,whatsapp:null,hours:null},
+  {id:4,name:"Mama Ngozi Bukka",category:"Food",city:"Enugu",address:"40 Ogui Road, Enugu",phone:"+234 805 544 3322",by:"user_3310",date:"Apr 27",status:"pending",photos:3,whatsapp:"+234 805 544 3322",hours:"Mon–Sat 6am–7pm"},
+  {id:5,name:"Sunshine Pharmacy",category:"Health",city:"Lagos",address:"12 Allen Avenue, Ikeja",phone:"+234 807 766 5544",by:"user_1124",date:"Apr 27",status:"pending",photos:1,whatsapp:null,hours:"Mon–Fri 8am–9pm"},
+  {id:6,name:"Park & Ride Motors",category:"Mechanics",city:"Port Harcourt",address:"Trans-Amadi Estate, PH",phone:"+234 803 322 1100",by:"user_8821",date:"Apr 26",status:"pending",photos:4,whatsapp:"+234 803 322 1100",hours:"Mon–Sat 7am–7pm"},
+  {id:7,name:"Ikeja Fuel Station",category:"Fuel",city:"Lagos",address:"14 Awolowo Way, Ikeja",phone:"+234 804 433 2211",by:"user_5501",date:"Apr 26",status:"dup",photos:0,whatsapp:null,hours:"24 hours"},
+  {id:8,name:"Garki Model Market",category:"Markets",city:"Abuja",address:"Garki Area 1, Abuja",phone:"+234 802 211 3300",by:"user_6601",date:"Apr 25",status:"pending",photos:2,whatsapp:"+234 802 211 3300",hours:"Mon–Sat 7am–6pm"},
+  {id:9,name:"Trust Hotel & Suites",category:"Hotels",city:"Kaduna",address:"Racecourse Road, Kaduna",phone:"+234 801 100 2233",by:"user_7712",date:"Apr 25",status:"flagged",photos:3,whatsapp:"+234 801 100 2233",hours:"24 hours"},
+  {id:10,name:"Musa Spare Parts",category:"Mechanics",city:"Kano",address:"Sabon Gari Market, Kano",phone:"+234 809 900 1122",by:"user_4400",date:"Apr 24",status:"dup",photos:1,whatsapp:null,hours:"Mon–Sat 8am–6pm"},
+  {id:11,name:"Holy Trinity Church",category:"Worship",city:"Ibadan",address:"Ring Road, Ibadan",phone:"+234 805 111 2222",by:"user_3302",date:"Apr 24",status:"pending",photos:2,whatsapp:null,hours:"Sun 7am–12pm"},
+  {id:12,name:"PH Central Bus Park",category:"Transport",city:"Port Harcourt",address:"Mile 1 Market, PH",phone:"+234 806 333 4444",by:"user_5503",date:"Apr 23",status:"pending",photos:0,whatsapp:null,hours:"5am–9pm daily"},
+];
+
+var EDITS = [
+  {id:1,place:"Al-Noor Pharmacy",city:"Kano",fieldLabel:"Phone number",old:"+234 802 300 0001",newv:"+234 902 334 4556",by:"user_2201",date:"Apr 28"},
+  {id:2,place:"Balogun Mama Put",city:"Lagos",fieldLabel:"Opening hours",old:"Mon–Sat 8am–6pm",newv:"Mon–Sun 7am–8pm",by:"user_4421",date:"Apr 28"},
+  {id:3,place:"Wuse Market ATM",city:"Abuja",fieldLabel:"Address",old:"Wuse Zone 4, Abuja",newv:"Zone 5, Wuse Market",by:"user_9910",date:"Apr 27"},
+  {id:4,place:"Ikeja Fuel Station",city:"Lagos",fieldLabel:"Category",old:"Markets",newv:"Fuel",by:"user_5501",date:"Apr 27"},
+  {id:5,place:"Trust Hotel & Suites",city:"Kaduna",fieldLabel:"WhatsApp",old:"Not listed",newv:"+234 801 100 2233",by:"user_7712",date:"Apr 26"},
+  {id:6,place:"Musa Spare Parts",city:"Kano",fieldLabel:"Phone number",old:"+234 809 000 0000",newv:"+234 809 900 1122",by:"user_4400",date:"Apr 25"},
+  {id:7,place:"Garki Model Market",city:"Abuja",fieldLabel:"Opening hours",old:"Mon–Fri 7am–5pm",newv:"Mon–Sat 7am–6pm",by:"user_6601",date:"Apr 25"},
+];
+
+var CLAIMS = [
+  {id:1,place:"Sunshine Pharmacy",city:"Lagos",method:"OTP",claimant:"Mrs. Adaeze Okonkwo",phone:"+234 807 766 5544",date:"Apr 28",proof:null},
+  {id:2,place:"Musa Spare Parts",city:"Kano",method:"Document",claimant:"Alhaji Musa Babangida",phone:"+234 809 900 1122",date:"Apr 27",proof:"CAC_Certificate.pdf"},
+  {id:3,place:"Trust Hotel & Suites",city:"Kaduna",method:"Document",claimant:"Ibrahim Trust Holdings",phone:"+234 801 100 2233",date:"Apr 26",proof:"Business_Reg.pdf"},
+  {id:4,place:"Mama Ngozi Bukka",city:"Enugu",method:"OTP",claimant:"Ngozi Eze",phone:"+234 805 544 3322",date:"Apr 25",proof:null},
+  {id:5,place:"Park & Ride Motors",city:"Port Harcourt",method:"Document",claimant:"Chukwuemeka Obi",phone:"+234 803 322 1100",date:"Apr 24",proof:"Utility_Bill.pdf"},
+];
+
+var REVIEWS = [
+  {id:1,place:"Wuse Market ATM",city:"Abuja",rating:1,text:"This place doesn't even exist. Fake listing put here to mislead people.",reviewer:"user_8823",date:"Apr 28",flags:4},
+  {id:2,place:"Trust Hotel & Suites",city:"Kaduna",rating:2,text:"Very suspicious — I think someone is spam listing these hotels just to collect calls.",reviewer:"user_3301",date:"Apr 27",flags:2},
+  {id:3,place:"Balogun Mama Put",city:"Lagos",rating:1,text:"Do not go here! The owner was rude and the food made me sick.",reviewer:"user_5512",date:"Apr 26",flags:1},
+];
+
+var CITIES = [
+  {name:"Lagos",state:"Lagos State",places:18421,pending:12,growth:92},
+  {name:"Abuja",state:"FCT",places:9203,pending:5,growth:78},
+  {name:"Kano",state:"Kano State",places:6844,pending:7,growth:65},
+  {name:"Port Harcourt",state:"Rivers State",places:4102,pending:0,growth:52},
+  {name:"Enugu",state:"Enugu State",places:2881,pending:0,growth:44},
+  {name:"Ibadan",state:"Oyo State",places:1490,pending:0,growth:38},
+  {name:"Kaduna",state:"Kaduna State",places:1204,pending:0,growth:30},
+  {name:"Ilorin",state:"Kwara State",places:891,pending:0,growth:22},
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+var selected = [];
+var qFilter = {search:'',city:'',cat:'',tab:'all'};
+var stats = {pending:24,edits:11,claims:7,approved:18};
+
+// ── CITY COLORS ───────────────────────────────────────────────────────────────
+var CITY_CLR = {Lagos:'#22c55e',Abuja:'#3b82f6',Kano:'#f59e0b','Port Harcourt':'#ec4899',Enugu:'#f97316',Ibadan:'#06b6d4',Kaduna:'#a78bfa',Ilorin:'#84cc16'};
+function cc(c){return CITY_CLR[c]||'#5a635a';}
+
+// ── SVG HELPERS ───────────────────────────────────────────────────────────────
+function ico(d){return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+d+'</svg>';}
+var IC = {
+  check: ico('<polyline points="20 6 9 17 4 12"/>'),
+  x:     ico('<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>'),
+  eye:   ico('<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>'),
+  trash: ico('<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>'),
+  clock: ico('<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>'),
+  flag:  ico('<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>'),
+  copy:  ico('<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>'),
+  shield:ico('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>'),
+  file:  ico('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>'),
+  warn:  ico('<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>'),
+  arr:   ico('<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>'),
+  photo: ico('<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>'),
+};
+
+// ── BADGE HELPERS ─────────────────────────────────────────────────────────────
+function statusBadge(s){
+  var m={pending:{cls:'badge-pending',ic:IC.clock,lbl:'Pending'},flagged:{cls:'badge-flagged',ic:IC.flag,lbl:'Flagged'},dup:{cls:'badge-dup',ic:IC.copy,lbl:'Possible dup'},approved:{cls:'badge-approved',ic:IC.check,lbl:'Approved'},rejected:{cls:'badge-rejected',ic:IC.x,lbl:'Rejected'}};
+  var c=m[s]||m.pending;
+  return '<span class="badge '+c.cls+'">'+c.ic+' '+c.lbl+'</span>';
+}
+function methodBadge(m){return m==='OTP'?'<span class="badge badge-otp">'+IC.shield+' OTP verified</span>':'<span class="badge badge-pending">'+IC.file+' Document</span>';}
+function stars(n){var s='';for(var i=0;i<5;i++)s+=i<n?'<span class="stars">★</span>':'<span class="stars-dim">★</span>';return s;}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function toast(msg,type){
+  type=type||'green';
+  var ic=type==='green'?IC.check:type==='red'?IC.x:IC.warn;
+  var el=document.createElement('div');
+  el.className='toast '+type;
+  el.innerHTML=ic+' '+msg;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(function(){el.remove();},3500);
+}
+
+// ── RENDER QUEUE ──────────────────────────────────────────────────────────────
+function getFiltered(){
+  return QUEUE.filter(function(r){
+    if(qFilter.tab==='dup'&&r.status!=='dup')return false;
+    if(qFilter.tab==='flagged'&&r.status!=='flagged')return false;
+    if(qFilter.search&&(r.name+' '+r.address).toLowerCase().indexOf(qFilter.search.toLowerCase())<0)return false;
+    if(qFilter.city&&r.city!==qFilter.city)return false;
+    if(qFilter.cat&&r.category!==qFilter.cat)return false;
+    return true;
+  });
+}
+
+function renderQueue(){
+  var data=getFiltered();
+  var tb=document.getElementById('queue-tbody');
+  var sc=document.getElementById('showing-count');
+  if(sc)sc.textContent=data.length;
+  if(!data.length){
+    tb.innerHTML='<tr><td colspan="8"><div class="empty-state">'+IC.check+'<p>All caught up!</p><span>No listings match the current filters.</span></div></td></tr>';
+    return;
+  }
+  tb.innerHTML=data.map(function(r){
+    return '<tr onclick="openModal(\'listing\','+r.id+')">'
+      +'<td onclick="event.stopPropagation()"><input type="checkbox" class="row-cb" data-id="'+r.id+'" onchange="toggleRow(this)"></td>'
+      +'<td><div class="place-name">'+r.name+'</div><div class="place-meta">'+r.address+'</div></td>'
+      +'<td><span style="color:var(--text-2);font-size:12px">'+r.category+'</span></td>'
+      +'<td><span class="city-dot" style="background:'+cc(r.city)+'"></span>'+r.city+'</td>'
+      +'<td><span style="font-size:11px;color:var(--text-3);font-family:var(--font-mono)">'+r.by+'</span></td>'
+      +'<td>'+statusBadge(r.status)+'</td>'
+      +'<td><span style="font-size:11px;color:var(--text-3);font-family:var(--font-mono)">'+r.date+'</span></td>'
+      +'<td onclick="event.stopPropagation()"><div class="actions">'
+      +'<button class="act-btn view" onclick="openModal(\'listing\','+r.id+')" title="Review">'+IC.eye+'</button>'
+      +'<button class="act-btn approve" onclick="quickAction('+r.id+',\'approve\')" title="Approve">'+IC.check+'</button>'
+      +'<button class="act-btn reject" onclick="quickAction('+r.id+',\'reject\')" title="Reject">'+IC.x+'</button>'
+      +'</div></td></tr>';
+  }).join('');
+}
+
+function renderEdits(){
+  var tb=document.getElementById('edits-tbody');
+  if(!tb)return;
+  tb.innerHTML=EDITS.map(function(e){
+    return '<tr onclick="openModal(\'edit\','+e.id+')">'
+      +'<td><div class="place-name">'+e.place+'</div><div class="place-meta">'+e.city+'</div></td>'
+      +'<td><span class="badge badge-pending" style="font-size:10px">'+e.fieldLabel+'</span></td>'
+      +'<td><span style="font-size:12px;color:var(--text-red);text-decoration:line-through">'+e.old+'</span></td>'
+      +'<td><span style="font-size:12px;color:var(--text-green)">'+e.newv+'</span></td>'
+      +'<td><span style="font-size:11px;color:var(--text-3);font-family:var(--font-mono)">'+e.date+' · '+e.by+'</span></td>'
+      +'<td onclick="event.stopPropagation()"><div class="actions">'
+      +'<button class="act-btn approve" onclick="approveEdit('+e.id+')" title="Approve">'+IC.check+'</button>'
+      +'<button class="act-btn reject" onclick="rejectEdit('+e.id+')" title="Reject">'+IC.x+'</button>'
+      +'</div></td></tr>';
+  }).join('');
+}
+
+function renderClaims(){
+  var tb=document.getElementById('claims-tbody');
+  if(!tb)return;
+  tb.innerHTML=CLAIMS.map(function(c){
+    return '<tr onclick="openModal(\'claim\','+c.id+')">'
+      +'<td><div class="place-name">'+c.place+'</div><div class="place-meta">'+c.city+'</div></td>'
+      +'<td>'+methodBadge(c.method)+'</td>'
+      +'<td><div class="place-name" style="font-size:13px">'+c.claimant+'</div><div class="place-meta">'+c.phone+'</div></td>'
+      +'<td>'+(c.proof?'<span class="badge badge-otp">'+IC.file+' '+c.proof+'</span>':'<span style="font-size:12px;color:var(--text-3)">—</span>')+'</td>'
+      +'<td><span style="font-size:11px;color:var(--text-3);font-family:var(--font-mono)">'+c.date+'</span></td>'
+      +'<td onclick="event.stopPropagation()"><div class="actions">'
+      +'<button class="act-btn view" onclick="openModal(\'claim\','+c.id+')" title="Review">'+IC.eye+'</button>'
+      +'<button class="act-btn approve" onclick="approveClaim('+c.id+')" title="Approve">'+IC.check+'</button>'
+      +'<button class="act-btn reject" onclick="rejectClaim('+c.id+')" title="Reject">'+IC.x+'</button>'
+      +'</div></td></tr>';
+  }).join('');
+}
+
+function renderReviews(){
+  var tb=document.getElementById('reviews-tbody');
+  if(!tb)return;
+  tb.innerHTML=REVIEWS.map(function(r){
+    return '<tr>'
+      +'<td><div class="place-name">'+r.place+'</div><div class="place-meta">'+r.city+'</div></td>'
+      +'<td>'+stars(r.rating)+'</td>'
+      +'<td style="font-size:12px;color:var(--text-2)">'+r.text.slice(0,90)+(r.text.length>90?'…':'')+'</td>'
+      +'<td><span style="font-size:11px;font-family:var(--font-mono);color:var(--text-3)">'+r.reviewer+'<br>'+r.date+'</span></td>'
+      +'<td><span class="badge badge-flagged">'+IC.flag+' '+r.flags+' flag'+(r.flags!==1?'s':'')+'</span></td>'
+      +'<td><div class="actions">'
+      +'<button class="act-btn approve" onclick="keepReview('+r.id+')" title="Keep">'+IC.check+'</button>'
+      +'<button class="act-btn reject" onclick="removeReview('+r.id+')" title="Remove">'+IC.trash+'</button>'
+      +'</div></td></tr>';
+  }).join('');
+}
+
+function renderCities(){
+  var tb=document.getElementById('cities-tbody');
+  if(!tb)return;
+  var max=Math.max.apply(null,CITIES.map(function(c){return c.places;}));
+  tb.innerHTML=CITIES.map(function(c){
+    return '<tr>'
+      +'<td><div style="display:flex;align-items:center;gap:8px"><span class="city-dot" style="background:'+cc(c.name)+';width:10px;height:10px"></span><div class="place-name">'+c.name+'</div></div></td>'
+      +'<td><span style="font-size:12px;color:var(--text-3)">'+c.state+'</span></td>'
+      +'<td><div class="mini-bar-wrap"><div class="mini-bar-track"><div class="mini-bar-fill" style="width:'+Math.round(c.places/max*100)+'%;background:'+cc(c.name)+'"></div></div><span class="mini-bar-val">'+c.places.toLocaleString()+'</span></div></td>'
+      +'<td>'+(c.pending>0?'<span class="badge badge-pending">'+c.pending+' pending</span>':'<span style="color:var(--text-3);font-size:12px">—</span>')+'</td>'
+      +'<td><span class="badge badge-approved">'+IC.check+' Active</span></td>'
+      +'</tr>';
+  }).join('');
+}
+
+// ── ACTIONS ───────────────────────────────────────────────────────────────────
+function quickAction(id,action){
+  var idx=QUEUE.findIndex(function(r){return r.id===id;});
+  if(idx>=0)QUEUE.splice(idx,1);
+  if(action==='approve'){stats.approved++;stats.pending=Math.max(0,stats.pending-1);toast('Listing approved and published.','green');}
+  else{stats.pending=Math.max(0,stats.pending-1);toast('Listing rejected.','amber');}
+  updateStats();renderQueue();closeModal();
+}
+function approveEdit(id){var idx=EDITS.findIndex(function(e){return e.id===id;});if(idx>=0)EDITS.splice(idx,1);stats.edits=Math.max(0,stats.edits-1);updateStats();renderEdits();toast('Edit approved and applied.','green');}
+function rejectEdit(id){var idx=EDITS.findIndex(function(e){return e.id===id;});if(idx>=0)EDITS.splice(idx,1);stats.edits=Math.max(0,stats.edits-1);updateStats();renderEdits();toast('Edit rejected.','amber');}
+function approveClaim(id){var idx=CLAIMS.findIndex(function(c){return c.id===id;});if(idx>=0)CLAIMS.splice(idx,1);stats.claims=Math.max(0,stats.claims-1);updateStats();renderClaims();toast('Claim approved — business verified!','green');closeModal();}
+function rejectClaim(id){var idx=CLAIMS.findIndex(function(c){return c.id===id;});if(idx>=0)CLAIMS.splice(idx,1);stats.claims=Math.max(0,stats.claims-1);updateStats();renderClaims();toast('Claim rejected.','amber');closeModal();}
+function keepReview(id){var idx=REVIEWS.findIndex(function(r){return r.id===id;});if(idx>=0)REVIEWS.splice(idx,1);renderReviews();toast('Review kept — flags cleared.','green');}
+function removeReview(id){var idx=REVIEWS.findIndex(function(r){return r.id===id;});if(idx>=0)REVIEWS.splice(idx,1);renderReviews();toast('Review removed.','amber');}
+
+// ── BULK ──────────────────────────────────────────────────────────────────────
+function toggleSelectAll(cb){
+  document.querySelectorAll('.row-cb').forEach(function(c){
+    c.checked=cb.checked;
+    var id=parseInt(c.dataset.id);
+    if(cb.checked){if(selected.indexOf(id)<0)selected.push(id);}else{selected=selected.filter(function(x){return x!==id;});}
+  });
+  updateBulk();
+}
+function toggleRow(cb){
+  var id=parseInt(cb.dataset.id);
+  if(cb.checked){if(selected.indexOf(id)<0)selected.push(id);}else{selected=selected.filter(function(x){return x!==id;});}
+  updateBulk();
+}
+function updateBulk(){
+  var n=selected.length;
+  document.getElementById('bulk-bar').classList.toggle('visible',n>0);
+  document.getElementById('bulk-count').textContent=n;
+  document.getElementById('bulk-approve-btn').style.display=n>0?'':'none';
+  document.getElementById('bulk-reject-btn').style.display=n>0?'':'none';
+}
+function bulkAction(action){
+  var n=selected.length;
+  selected.forEach(function(id){var idx=QUEUE.findIndex(function(r){return r.id===id;});if(idx>=0)QUEUE.splice(idx,1);});
+  if(action==='approve'){stats.approved+=n;toast(n+' listing'+(n>1?'s':'')+' approved.','green');}
+  else{toast(n+' listing'+(n>1?'s':'')+' rejected.','amber');}
+  stats.pending=Math.max(0,stats.pending-n);
+  selected=[];updateStats();updateBulk();
+  document.getElementById('select-all').checked=false;
+  renderQueue();
+}
+
+// ── MODAL ─────────────────────────────────────────────────────────────────────
+function openModal(type,id){
+  var title=document.getElementById('modal-title');
+  var sub=document.getElementById('modal-sub');
+  var body=document.getElementById('modal-body');
+  var footer=document.getElementById('modal-footer');
+
+  if(type==='listing'){
+    var r=QUEUE.find(function(i){return i.id===id;});
+    if(!r)return;
+    title.textContent=r.name;
+    sub.textContent='Listing review · '+r.city+' · '+r.date;
+    var photos=Array.from({length:Math.max(r.photos,1)},function(){return '<div class="photo-thumb">'+IC.photo+'</div>';}).join('');
+    body.innerHTML='<div class="field-grid-2">'
+      +'<div class="field-group"><div class="field-label">Category</div><div class="field-val">'+r.category+'</div></div>'
+      +'<div class="field-group"><div class="field-label">Status</div><div class="field-val">'+statusBadge(r.status)+'</div></div>'
+      +'<div class="field-group"><div class="field-label">City</div><div class="field-val"><span class="city-dot" style="background:'+cc(r.city)+'"></span>'+r.city+'</div></div>'
+      +'<div class="field-group"><div class="field-label">Submitted by</div><div class="field-val field-val-dim">'+r.by+'</div></div>'
+      +'</div>'
+      +'<div class="field-group"><div class="field-label">Address</div><div class="field-val">'+r.address+'</div></div>'
+      +'<div class="field-grid-2">'
+      +'<div class="field-group"><div class="field-label">Phone</div><div class="field-val">'+r.phone+'</div></div>'
+      +'<div class="field-group"><div class="field-label">WhatsApp</div><div class="field-val">'+(r.whatsapp||'<span style="color:var(--text-3)">Not listed</span>')+'</div></div>'
+      +'</div>'
+      +'<div class="field-group"><div class="field-label">Opening hours</div><div class="field-val">'+(r.hours||'<span style="color:var(--text-3)">Not provided</span>')+'</div></div>'
+      +'<div class="field-group"><div class="field-label">Photos ('+r.photos+')</div><div class="photo-grid">'+photos+'</div></div>'
+      +(r.status==='dup'?'<div class="warn-box">'+IC.warn+' Possible duplicate detected within 20m radius. Verify this is a unique business before approving.</div>':'')
+      +(r.status==='flagged'?'<div class="warn-box">'+IC.warn+' This listing has been flagged by users. Review carefully before approving.</div>':'')
+      +'<div class="field-group" style="margin-top:16px"><div class="field-label">Admin note (optional)</div><textarea placeholder="Reason for approval or rejection…"></textarea></div>';
+    footer.innerHTML='<button class="btn" onclick="closeModal()">Cancel</button>'
+      +'<button class="btn btn-red" onclick="quickAction('+r.id+',\'reject\')">'+IC.x+' Reject</button>'
+      +'<button class="btn btn-green" onclick="quickAction('+r.id+',\'approve\')">'+IC.check+' Approve & publish</button>';
+  }
+
+  if(type==='edit'){
+    var e=EDITS.find(function(i){return i.id===id;});
+    if(!e)return;
+    title.textContent='Edit: '+e.place;
+    sub.textContent='Field change · Submitted '+e.date+' by '+e.by;
+    body.innerHTML='<p style="font-size:13px;color:var(--text-2);margin-bottom:16px">Review the proposed change below. Approving will update the live listing immediately.</p>'
+      +'<div class="diff-item"><span class="diff-field-name">'+e.fieldLabel+'</span><span class="diff-old">'+e.old+'</span><span class="diff-arrow">'+IC.arr+'</span><span class="diff-new">'+e.newv+'</span></div>'
+      +'<div class="field-group" style="margin-top:16px"><div class="field-label">Admin note (optional)</div><textarea placeholder="Reason for decision…"></textarea></div>';
+    footer.innerHTML='<button class="btn" onclick="closeModal()">Cancel</button>'
+      +'<button class="btn btn-red" onclick="rejectEdit('+e.id+')">'+IC.x+' Reject</button>'
+      +'<button class="btn btn-green" onclick="approveEdit('+e.id+')">'+IC.check+' Approve change</button>';
+  }
+
+  if(type==='claim'){
+    var c=CLAIMS.find(function(i){return i.id===id;});
+    if(!c)return;
+    title.textContent='Claim: '+c.place;
+    sub.textContent='Business claim · '+c.city+' · '+c.date;
+    body.innerHTML='<div class="field-grid-2">'
+      +'<div class="field-group"><div class="field-label">City</div><div class="field-val">'+c.city+'</div></div>'
+      +'<div class="field-group"><div class="field-label">Method</div><div class="field-val">'+methodBadge(c.method)+'</div></div>'
+      +'</div>'
+      +'<div class="field-group"><div class="field-label">Claimant</div><div class="field-val">'+c.claimant+'</div></div>'
+      +'<div class="field-group"><div class="field-label">Phone</div><div class="field-val">'+c.phone+'</div></div>'
+      +(c.proof?'<div class="field-group"><div class="field-label">Document</div><div class="field-val"><span class="badge badge-otp">'+IC.file+' '+c.proof+'</span></div></div>'
+        :'<div class="warn-box">'+IC.warn+' OTP-based claim. Ownership verified by sending OTP to the listed phone number.</div>')
+      +'<div class="field-group" style="margin-top:16px"><div class="field-label">Admin note (optional)</div><textarea placeholder="Notes on this claim…"></textarea></div>';
+    footer.innerHTML='<button class="btn" onclick="closeModal()">Cancel</button>'
+      +'<button class="btn btn-red" onclick="rejectClaim('+c.id+')">'+IC.x+' Reject claim</button>'
+      +'<button class="btn btn-green" onclick="approveClaim('+c.id+')">'+IC.shield+' Approve & verify</button>';
+  }
+
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
+var TITLES={queue:'Moderation queue',edits:'Edits review',claims:'Claim requests',reviews:'Flagged reviews','api-users':'Users','api-businesses':'Businesses',cities:'City coverage',settings:'Settings'};
+function setView(view){
+  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
+  document.querySelector('.nav-item[data-view="'+view+'"]').classList.add('active');
+  document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active');});
+  document.getElementById('view-'+view).classList.add('active');
+  document.getElementById('topbar-title').textContent=TITLES[view]||view;
+}
+
+// ── FILTER HANDLERS ───────────────────────────────────────────────────────────
+function onSearchInput(v){qFilter.search=v;renderQueue();}
+function onCityFilter(v){qFilter.city=v;renderQueue();}
+function onCatFilter(v){qFilter.cat=v;renderQueue();}
+function switchTab(el,tab){
+  document.querySelectorAll('.tab-btn').forEach(function(t){t.classList.remove('active');});
+  el.classList.add('active');
+  qFilter.tab=tab;
+  renderQueue();
+}
+
+// ── STATS UPDATE ──────────────────────────────────────────────────────────────
+function updateStats(){
+  document.getElementById('stat-pending').textContent=stats.pending;
+  document.getElementById('stat-edits').textContent=stats.edits;
+  document.getElementById('stat-claims').textContent=stats.claims;
+  document.getElementById('stat-approved').textContent=stats.approved;
+  document.getElementById('nav-badge-queue').textContent=stats.pending;
+  document.getElementById('nav-badge-edits').textContent=stats.edits;
+  document.getElementById('nav-badge-claims').textContent=stats.claims;
+}
+
+function refreshAll(){
+  if(window.MesstoApi){MesstoApi.refreshApiData();}
+  var btn=document.getElementById('refresh-btn');
+  btn.style.opacity='0.5';btn.style.pointerEvents='none';
+  setTimeout(function(){btn.style.opacity='';btn.style.pointerEvents='';toast('Dashboard refreshed.','green');},800);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',function(){
+  renderQueue();
+  renderEdits();
+  renderClaims();
+  renderReviews();
+  renderCities();
+  document.getElementById('modal-overlay').addEventListener('click',function(e){if(e.target===e.currentTarget)closeModal();});
+});
+</script>
+</body>
+</html>
